@@ -67,4 +67,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git tag -a ${{ steps.bump-version.outputs.version }} -m "Bump version to ${{ steps.bump-version.outputs.version }} [skip ci]"
-          git push origin ${{ github.ref }}
+          git push origin https://github.com/KuyeselaOrganization/test-project-releases.git ${{ github.ref }}
