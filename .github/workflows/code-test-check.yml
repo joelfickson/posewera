@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   checkout:
     runs-on: ubuntu-latest
@@ -18,6 +17,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
+
       - name: Install dependencies
         run: yarn
 
@@ -29,6 +29,7 @@ jobs:
     defaults:
       run:
         working-directory: ./vwaza-types
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -38,6 +39,7 @@ jobs:
         with:
           node-version: 20.x
           registry-url: 'https://registry.npmjs.org'
+
       - name: Install dependencies
         run: yarn
 
@@ -45,14 +47,18 @@ jobs:
         run: yarn build
 
       - name: Bump version & push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'Test CI'
           git config --global user.email 'test@users.noreply.github.com'
-          
+
           npm version patch --force -m "Bump version to %s [skip ci]"
-          git push && git push --tags
+          git push origin && git push --tags
 
       - name: Commit changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'Test CI'
           git config --global user.email 'test@users.noreply.github.com'
@@ -61,5 +67,8 @@ jobs:
           git push
 
       - name: Push Tag To Remote Repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push https://github.com/KuyeselaOrganization/test-project-releases.git ${{ github.ref }}
+          git tag -a ${{ steps.bump-version.outputs.version }} -m ${{ steps.bump-version.outputs.conventional_changelog }}
+          git push origin ${{ github.ref }}
