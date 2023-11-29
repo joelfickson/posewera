@@ -24,6 +24,6 @@ jobs:
 
       - name: Push Latest Tag To Releases Repo
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PAT }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git push https://github.com/KuyeselaOrganization/test-project-releases.git refs/tags/${{ steps.latest-tag.outputs.latest_tag }}
