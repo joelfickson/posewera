@@ -3,7 +3,7 @@ name: Build, Generate Tags & Push To Remote Repo
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   checkout:
