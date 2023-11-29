@@ -1,0 +1,65 @@
+name: Build, Generate Tags & Push To Remote Repo
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+      - name: Install dependencies
+        run: yarn
+
+  publish:
+    needs: [ 'checkout' ]
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./vwaza-types
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build the dependencies
+        run: yarn build
+
+      - name: Bump version & push
+        run: |
+          git config --global user.name 'Test CI'
+          git config --global user.email 'test@users.noreply.github.com'
+          
+          npm version patch --force -m "Bump version to %s [skip ci]"
+          git push && git push --tags
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'Test CI'
+          git config --global user.email 'test@users.noreply.github.com'
+          git add .
+          git commit -m "Bump package version [skip ci]"
+          git push
+
+      - name: Push Tag To Remote Repo
+        run: |
+          git push https://github.com/KuyeselaOrganization/test-project-releases.git ${{ github.ref }}
