@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon"
+    "start:dev": "nodemon",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "Joel Fickson",
