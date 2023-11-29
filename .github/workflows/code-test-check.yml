@@ -42,29 +42,20 @@ jobs:
       - name: Build the dependencies
         run: yarn build
 
-      - name: Bump version & push
+      - name: Bump version
+        id: bump-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'Test CI'
           git config --global user.email 'test@users.noreply.github.com'
-
-          npm version patch --force -m "Bump version to %s [skip ci]"
-          git push origin && git push --tags
-
-#      - name: Commit changes
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          git config --global user.name 'Test CI'
-#          git config --global user.email 'test@users.noreply.github.com'
-#          git add .
-#          git commit -m "Bump package version [skip ci]"
-#          git push
+          version=$(npm version patch --force -m "Bump version to %s [skip ci]")
+          git push
+          echo "::set-output name=version::$version"
 
       - name: Push Tag To Remote Repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git tag -a ${{ steps.bump-version.outputs.version }} -m "Bump version to ${{ steps.bump-version.outputs.version }} [skip ci]"
-          git push origin https://github.com/KuyeselaOrganization/test-project-releases.git ${{ github.ref }}
+          git push https://github.com/KuyeselaOrganization/test-project-releases.git ${{ steps.bump-version.outputs.version }}
