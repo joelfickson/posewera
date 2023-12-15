@@ -7,6 +7,9 @@ on:
 jobs:
   push-latest-tag:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./HapiApi
 
     steps:
       - name: Checkout code

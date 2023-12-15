@@ -10,7 +10,7 @@
     "paths": {
       "src/*": [
         "./src"
-      ],
+      ]
     },
     "declaration": true,
     "declarationMap": true,
@@ -49,10 +49,10 @@
     "preserveConstEnums": true
   },
   "include": [
-    "src/**/*",
+    "HapiApi/src/**/*",
     "@types/**/*d.ts"
   ],
   "exclude": [
-    "node_modules",
+    "node_modules"
   ]
 }
