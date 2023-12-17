@@ -1,0 +1,13 @@
+[package]
+name = "trying-dioxus"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dioxus = "*"
+dioxus-fullstack = "*"
+
+[features]
+default = []
+ssr = ["dioxus-fullstack/axum"]
+web = ["dioxus-fullstack/web"]
